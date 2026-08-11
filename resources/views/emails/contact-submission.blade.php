@@ -26,7 +26,7 @@
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:{{ $backgroundColor }};padding:32px 12px;"><tr><td align="center">
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:640px;background:#fff;border:1px solid #e4eaf2;border-radius:18px;overflow:hidden;">
     <tr><td @if($headerImage) background="{{ $headerImage }}" @endif style="background-color:{{ $headerColor }};@if($headerImage) background-image:linear-gradient(rgba(17,27,54,.78),rgba(17,27,54,.88)),url('{{ $headerImage }}');background-size:cover;background-position:center;@endif padding:32px 36px;color:#fff;">
-        @if($logo)<img src="{{ $logo }}" alt="{{ $eyebrow }} logo" style="display:block;max-width:160px;max-height:52px;width:auto;height:auto;margin:0 0 18px;">@endif
+        @if($logo)<img src="{{ $logo }}" alt="{{ $eyebrow }} logo" style="display:block;max-width:160px;max-height:52px;width:auto;height:auto;margin:0 0 18px;border-radius:8px;">@endif
         <div style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#bcd0f5;">{{ $eyebrow }}</div>
         <h1 style="margin:12px 0 0;font-size:26px;line-height:1.25;">{{ $heading }}</h1>
         <p style="margin:10px 0 0;color:#e0e9fb;font-size:14px;line-height:1.55;">{{ $intro }}</p>
