@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Contact Bridge API documentation for connecting website contact forms.">
     <title>Developer docs - Contact Bridge</title>
+    <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon-32x32.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
@@ -16,8 +18,8 @@
         .shell { width:min(1120px,calc(100% - 40px)); margin:auto; }
         .nav { height:82px; display:flex; align-items:center; justify-content:space-between; }
         .logo { display:flex; align-items:center; gap:12px; font:800 17px Manrope,sans-serif; }
-        .mark { width:36px; height:36px; display:grid; place-items:center; border-radius:8px; background:var(--navy); color:#fff; box-shadow:0 12px 30px rgba(17,26,51,.18); }
-        .mark:before { content:"CB"; font-size:12px; letter-spacing:.08em; }
+        .mark { width:36px; height:36px; display:grid; place-items:center; border-radius:8px; background:#fff; color:#fff; box-shadow:0 12px 30px rgba(17,26,51,.18); }
+        .mark img { width:100%; height:100%; object-fit:contain; border:1px solid rgba(255,255,255,.94); border-radius:6px; padding:2px; }
         .navlinks { display:flex; align-items:center; gap:24px; color:#526076; font-size:14px; }
         .navlinks a:hover { color:var(--ink); }
         .nav-cta { border-radius:8px; background:var(--navy); color:#fff; padding:12px 18px; font-weight:700; box-shadow:0 14px 28px rgba(17,26,51,.2); }
@@ -57,7 +59,7 @@
 <body>
 <div class="shell">
     <nav class="nav">
-        <a class="logo" href="{{ url('/') }}"><span class="mark"></span>Contact Bridge</a>
+        <a class="logo" href="{{ url('/') }}"><span class="mark"><img src="{{ asset('images/contact-bridge-logo-512.png') }}" alt=""></span>Contact Bridge</a>
         <div class="navlinks">
             <a href="{{ url('/') }}">Back to home</a>
             <a class="nav-cta" href="{{ route('admin.login') }}">Open dashboard</a>

@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? 'Admin - Contact Bridge' }}</title>
+    <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon-32x32.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
@@ -18,9 +20,9 @@
         .topbar { position:sticky; top:18px; z-index:20; display:flex; justify-content:space-between; align-items:center; gap:20px; min-height:64px; margin-bottom:42px; padding:0 14px 0 16px; border:1px solid rgba(199,211,237,.9); border-radius:10px; background:rgba(244,248,255,.88); box-shadow:0 16px 38px rgba(17,26,51,.11); backdrop-filter:blur(14px); }
         .brand { display:flex; align-items:center; gap:11px; color:var(--ink); text-decoration:none; font:800 17px Manrope,sans-serif; }
         .sidebar .brand { color:#fff; }
-        .mark { width:35px; height:35px; display:grid; place-items:center; border-radius:8px; background:var(--navy); color:#fff; box-shadow:0 12px 30px rgba(17,26,51,.18); }
-        .sidebar .mark { background:var(--blue); box-shadow:0 12px 30px rgba(48,92,246,.34); }
-        .mark:before { content:"CB"; font-size:11px; letter-spacing:.08em; }
+        .mark { width:35px; height:35px; display:grid; place-items:center; border-radius:8px; background:#fff; color:#fff; box-shadow:0 12px 30px rgba(17,26,51,.18); }
+        .sidebar .mark { background:#fff; box-shadow:0 12px 30px rgba(48,92,246,.34); }
+        .mark img { width:100%; height:100%; object-fit:contain; border:1px solid rgba(255,255,255,.94); border-radius:6px; padding:2px; }
         .topbar-right, .actions { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
         .sidebar-nav { display:grid; gap:5px; margin-top:48px; }
         .sidebar-label { margin:0 10px 8px; color:#9daed6; font-size:10px; font-weight:800; letter-spacing:.13em; text-transform:uppercase; }
@@ -71,7 +73,7 @@
 <body>
 <div class="app-shell">
     <aside class="sidebar">
-        <a class="brand" href="{{ route('admin.dashboard') }}"><span class="mark"></span>Contact Bridge</a>
+        <a class="brand" href="{{ route('admin.dashboard') }}"><span class="mark"><img src="{{ asset('images/contact-bridge-logo-512.png') }}" alt=""></span>Contact Bridge</a>
         <nav class="sidebar-nav">
             <div class="sidebar-label">Workspace</div>
             <a class="nav-link @if(request()->routeIs('admin.dashboard')) active @endif" href="{{ route('admin.dashboard') }}"><span class="nav-icon">D</span>Dashboard</a>
@@ -85,7 +87,7 @@
     </aside>
     <div class="wrap">
     <header class="topbar">
-        <div class="brand"><span class="mark"></span>Operations workspace</div>
+        <div class="brand"><span class="mark"><img src="{{ asset('images/contact-bridge-logo-512.png') }}" alt=""></span>Operations workspace</div>
         <div class="topbar-right">
             <a class="nav-link" href="{{ route('developers') }}">API docs</a>
             <form method="POST" action="{{ route('admin.logout') }}">@csrf<button class="button secondary" type="submit">Sign out</button></form>
