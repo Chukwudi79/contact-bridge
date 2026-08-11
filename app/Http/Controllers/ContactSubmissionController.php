@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\ContactSubmission;
+use App\Jobs\SendContactSubmission;
 use App\Models\ContactSubmission as ContactSubmissionRecord;
 use App\Models\ContactSource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 
 class ContactSubmissionController extends Controller
 {
@@ -65,22 +64,13 @@ class ContactSubmissionController extends Controller
             'context' => ['origin' => $origin, 'recipient' => $submission['recipient']],
         ]);
 
-        try {
-            $record->events()->create(['event' => 'delivery_attempted', 'status' => 'pending', 'message' => 'SMTP delivery started.']);
-            Mail::to($submission['recipient'])
-                ->send((new ContactSubmission($submission, $source))->replyTo($submission['email']));
-            $record->update(['status' => 'sent', 'sent_at' => now()]);
-            $record->events()->create(['event' => 'delivery_sent', 'status' => 'sent', 'message' => 'SMTP delivery completed successfully.']);
-            Log::info('Contact submission delivered', ['submission_id' => $record->id, 'origin' => $submission['website_origin'], 'recipient' => $submission['recipient']]);
-        } catch (\Throwable $exception) {
-            $record->update(['status' => 'failed', 'failure_reason' => $exception->getMessage()]);
-            $record->events()->create(['event' => 'delivery_failed', 'status' => 'failed', 'message' => 'SMTP delivery failed: '.$exception->getMessage()]);
-            Log::error('Contact submission delivery failed', ['submission_id' => $record->id, 'origin' => $submission['website_origin'], 'recipient' => $submission['recipient'], 'exception' => $exception]);
-            return response()->json(['message' => 'We could not send your message right now.'], 503);
-        }
+        SendContactSubmission::dispatch($record->id);
+        $record->events()->create(['event' => 'delivery_queued', 'status' => 'pending', 'message' => 'SMTP delivery queued for background processing.']);
 
         return response()->json([
-            'message' => 'Your message has been sent successfully.',
+            'message' => 'Your message has been queued for delivery.',
+            'submission_id' => $record->id,
+            'status' => 'pending',
         ], 202);
     }
 }

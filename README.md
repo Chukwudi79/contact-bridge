@@ -55,6 +55,10 @@ The bridge never accepts the origin from the request body, and recipient values 
 
 Run migrations and seed the three admin accounts with `php artisan migrate --seed`, then visit `/admin/login`. The seeded accounts are `admin@example.com` / `Admin@12345`, `operations@example.com` / `Operations@12345`, and `support@example.com` / `Support@12345`; change these credentials before production use.
 
+### Production delivery and throttling
+
+Contact emails are queued so SMTP latency does not slow down form submissions. Keep a worker running in production with `php artisan queue:work --tries=3 --timeout=45` (use Supervisor, Horizon, or your platform worker service). Public form requests are limited per IP and origin by `CONTACT_RATE_LIMIT` (default 10/minute), with an origin-wide ceiling of `CONTACT_ORIGIN_RATE_LIMIT` (default 60/minute). Use Redis for cache and queues when scaling beyond a single application instance.
+
 ### Per-website email templates
 
 Open **Sources** in the admin workspace and select **Email template** for a website to customize its email subject, header label, heading, message, footer, and optional header background image. Run `php artisan storage:link` once in deployed environments so uploaded header images can be reached by email recipients.

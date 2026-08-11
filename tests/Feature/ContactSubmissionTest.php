@@ -7,6 +7,7 @@ use App\Models\ContactSource;
 use App\Models\ContactSubmission;
 use App\Mail\AdminSubmissionReply;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -27,6 +28,7 @@ class ContactSubmissionTest extends TestCase
     public function test_an_allowed_origin_can_submit_and_sets_reply_to(): void
     {
         Mail::fake();
+        Queue::fake();
 
         $response = $this->withHeader('Origin', 'https://platform-a.example')->postJson('/api/contact', [
             'firstName' => 'Adeleke',
@@ -37,7 +39,9 @@ class ContactSubmissionTest extends TestCase
             'message' => 'I would like a demo.',
         ]);
 
-        $response->assertAccepted()->assertJson(['message' => 'Your message has been sent successfully.']);
+        $response->assertAccepted()->assertJson(['message' => 'Your message has been queued for delivery.', 'status' => 'pending']);
+        Queue::assertPushed(\App\Jobs\SendContactSubmission::class);
+        (new \App\Jobs\SendContactSubmission(1))->handle();
         Mail::assertSent(\App\Mail\ContactSubmission::class, function ($mail) {
             return $mail->hasTo('inbox@example.com')
                 && $mail->hasReplyTo('adeleke@example.com')

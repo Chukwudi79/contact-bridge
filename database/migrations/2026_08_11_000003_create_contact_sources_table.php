@@ -10,9 +10,9 @@ return new class extends Migration
     {
         Schema::create('contact_sources', function (Blueprint $table) {
             $table->id();
-            $table->string('origin', 255)->unique();
+            $table->string('origin', 191)->unique('contact_sources_origin_unique');
             $table->string('recipient', 254);
-            $table->boolean('is_active')->default(true)->index();
+            $table->boolean('is_active')->default(true)->index('contact_sources_is_active_index');
             $table->timestamps();
         });
     }
