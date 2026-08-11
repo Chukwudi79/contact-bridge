@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{ $title ?? 'Admin · Contact Bridge' }}</title>
+    <style>body{margin:0;background:#f4f7fb;color:#172033;font:15px Arial,sans-serif}.wrap{max-width:1120px;margin:0 auto;padding:32px 20px}.nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}.brand{font-size:20px;font-weight:700}.card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:22px;box-shadow:0 8px 30px #1720330b}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:14px 10px;border-bottom:1px solid #edf1f6;vertical-align:top}th{font-size:12px;text-transform:uppercase;color:#718096;letter-spacing:.06em}.muted{color:#718096}.badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#e8eef8;font-size:12px}.actions{display:flex;gap:8px;align-items:center}select,input{padding:9px;border:1px solid #d8e0ec;border-radius:8px;background:#fff}button,.button{border:0;border-radius:8px;background:#1d4ed8;color:#fff;padding:9px 13px;cursor:pointer;text-decoration:none}.button.secondary{background:#e8eef8;color:#172033}.alert{padding:12px;border-radius:8px;background:#e7f7ee;margin-bottom:16px}</style>
+</head>
+<body><div class="wrap"><div class="nav"><div class="brand">Contact Bridge</div><div class="actions"><a class="button secondary" href="{{ route('admin.submissions.index') }}">Submissions</a><a class="button secondary" href="{{ route('admin.sources.index') }}">Sources</a><form method="POST" action="{{ route('admin.logout') }}">@csrf<button class="button secondary">Sign out</button></form></div></div>@if(session('success'))<div class="alert">{{ session('success') }}</div>@endif @yield('content')</div></body>
+</html>
