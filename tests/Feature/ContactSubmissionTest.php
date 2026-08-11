@@ -187,4 +187,20 @@ class ContactSubmissionTest extends TestCase
 
         $this->actingAs($admin)->get(route('admin.users.index'))->assertOk()->assertSee('New Workspace User');
     }
+
+    public function test_an_admin_can_edit_a_source_origin_and_recipient(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $source = ContactSource::firstOrFail();
+
+        $this->actingAs($admin)
+            ->patch(route('admin.sources.details.update', $source), [
+                'origin' => 'https://updated-platform.example',
+                'recipient' => 'updated@example.com',
+                'is_active' => '1',
+            ])
+            ->assertRedirect(route('admin.sources.index'));
+
+        $this->assertDatabaseHas('contact_sources', ['id' => $source->id, 'origin' => 'https://updated-platform.example', 'recipient' => 'updated@example.com']);
+    }
 }

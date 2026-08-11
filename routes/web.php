@@ -33,6 +33,8 @@ Route::middleware(EnsureAdmin::class)->prefix('admin')->name('admin.')->group(fu
     Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
     Route::get('/sources', [AdminSourceController::class, 'index'])->name('sources.index');
     Route::post('/sources', [AdminSourceController::class, 'store'])->name('sources.store');
+    Route::get('/sources/{source}/edit', [AdminSourceController::class, 'edit'])->name('sources.edit');
+    Route::patch('/sources/{source}/details', [AdminSourceController::class, 'updateDetails'])->name('sources.details.update');
     Route::patch('/sources/{source}', [AdminSourceController::class, 'update'])->name('sources.update');
     Route::get('/sources/{source}/template', [AdminSourceController::class, 'editTemplate'])->name('sources.template.edit');
     Route::patch('/sources/{source}/template', [AdminSourceController::class, 'updateTemplate'])->name('sources.template.update');

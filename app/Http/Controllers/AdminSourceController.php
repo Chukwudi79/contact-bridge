@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class AdminSourceController extends Controller
@@ -47,6 +48,26 @@ class AdminSourceController extends Controller
         Log::info('Contact source updated', ['source_id' => $source->id, 'admin_id' => $request->user()->id]);
 
         return back()->with('success', 'Website source updated.');
+    }
+
+    public function edit(ContactSource $source): View
+    {
+        return view('admin.sources.edit', ['source' => $source]);
+    }
+
+    public function updateDetails(Request $request, ContactSource $source): RedirectResponse
+    {
+        $validated = $request->validate([
+            'origin' => ['required', 'url:http,https', 'max:191', Rule::unique('contact_sources', 'origin')->ignore($source)],
+            'recipient' => ['required', 'email:rfc', 'max:254'],
+            'is_active' => ['required', 'boolean'],
+        ]);
+
+        $validated['origin'] = rtrim(trim($validated['origin']), '/');
+        $source->update($validated);
+        Log::info('Contact source details updated', ['source_id' => $source->id, 'origin' => $source->origin, 'admin_id' => $request->user()->id]);
+
+        return redirect()->route('admin.sources.index')->with('success', 'Website source details updated.');
     }
 
     public function editTemplate(ContactSource $source): View
