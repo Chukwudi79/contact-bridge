@@ -77,6 +77,7 @@
             <a class="nav-link @if(request()->routeIs('admin.dashboard')) active @endif" href="{{ route('admin.dashboard') }}"><span class="nav-icon">D</span>Dashboard</a>
             <a class="nav-link @if(request()->routeIs('admin.submissions.*')) active @endif" href="{{ route('admin.submissions.index') }}"><span class="nav-icon">S</span>Submissions</a>
             <a class="nav-link @if(request()->routeIs('admin.sources.*')) active @endif" href="{{ route('admin.sources.index') }}"><span class="nav-icon">O</span>Sources</a>
+            <a class="nav-link @if(request()->routeIs('admin.users.*')) active @endif" href="{{ route('admin.users.index') }}"><span class="nav-icon">U</span>Users</a>
             <div class="sidebar-label" style="margin-top:22px">Resources</div>
             <a class="nav-link" href="{{ route('developers') }}"><span class="nav-icon">A</span>API docs</a>
         </nav>

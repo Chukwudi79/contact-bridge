@@ -161,4 +161,26 @@ class ContactSubmissionTest extends TestCase
             'status' => 'sent',
         ]);
     }
+
+    public function test_an_admin_can_create_a_workspace_user(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+
+        $this->actingAs($admin)
+            ->post(route('admin.users.store'), [
+                'name' => 'New Workspace User',
+                'email' => 'new.user@example.com',
+                'password' => 'SecurePass123',
+                'password_confirmation' => 'SecurePass123',
+                'is_admin' => '1',
+            ])
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'new.user@example.com',
+            'is_admin' => true,
+        ]);
+
+        $this->actingAs($admin)->get(route('admin.users.index'))->assertOk()->assertSee('New Workspace User');
+    }
 }

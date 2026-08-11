@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminSubmissionController;
 use App\Http\Controllers\AdminSourceController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Middleware\EnsureAdmin;
 
 Route::get('/', function () {
@@ -26,6 +27,10 @@ Route::middleware(EnsureAdmin::class)->prefix('admin')->name('admin.')->group(fu
     Route::patch('/submissions/{submission}', [AdminSubmissionController::class, 'update'])->name('submissions.update');
     Route::post('/submissions/{submission}/resend', [AdminSubmissionController::class, 'resend'])->name('submissions.resend');
     Route::post('/submissions/{submission}/reply', [AdminSubmissionController::class, 'reply'])->name('submissions.reply');
+    Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+    Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
+    Route::patch('/users/{user}', [AdminUserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
     Route::get('/sources', [AdminSourceController::class, 'index'])->name('sources.index');
     Route::post('/sources', [AdminSourceController::class, 'store'])->name('sources.store');
     Route::patch('/sources/{source}', [AdminSourceController::class, 'update'])->name('sources.update');
