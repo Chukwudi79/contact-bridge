@@ -55,6 +55,10 @@ The bridge never accepts the origin from the request body, and recipient values 
 
 Run migrations and seed the three admin accounts with `php artisan migrate --seed`, then visit `/admin/login`. The seeded accounts are `admin@example.com` / `Admin@12345`, `operations@example.com` / `Operations@12345`, and `support@example.com` / `Support@12345`; change these credentials before production use.
 
+### Per-website email templates
+
+Open **Sources** in the admin workspace and select **Email template** for a website to customize its email subject, header label, heading, message, footer, and optional header background image. Run `php artisan storage:link` once in deployed environments so uploaded header images can be reached by email recipients.
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:

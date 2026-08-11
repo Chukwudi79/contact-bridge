@@ -58,14 +58,23 @@ class ContactSubmissionController extends Controller
             'message' => $submission['message'],
             'status' => 'pending',
         ]);
+        $record->events()->create([
+            'event' => 'submission_received',
+            'status' => 'pending',
+            'message' => 'Contact form submission received from an approved origin.',
+            'context' => ['origin' => $origin, 'recipient' => $submission['recipient']],
+        ]);
 
         try {
+            $record->events()->create(['event' => 'delivery_attempted', 'status' => 'pending', 'message' => 'SMTP delivery started.']);
             Mail::to($submission['recipient'])
-                ->send((new ContactSubmission($submission))->replyTo($submission['email']));
+                ->send((new ContactSubmission($submission, $source))->replyTo($submission['email']));
             $record->update(['status' => 'sent', 'sent_at' => now()]);
+            $record->events()->create(['event' => 'delivery_sent', 'status' => 'sent', 'message' => 'SMTP delivery completed successfully.']);
             Log::info('Contact submission delivered', ['submission_id' => $record->id, 'origin' => $submission['website_origin'], 'recipient' => $submission['recipient']]);
         } catch (\Throwable $exception) {
             $record->update(['status' => 'failed', 'failure_reason' => $exception->getMessage()]);
+            $record->events()->create(['event' => 'delivery_failed', 'status' => 'failed', 'message' => 'SMTP delivery failed: '.$exception->getMessage()]);
             Log::error('Contact submission delivery failed', ['submission_id' => $record->id, 'origin' => $submission['website_origin'], 'recipient' => $submission['recipient'], 'exception' => $exception]);
             return response()->json(['message' => 'We could not send your message right now.'], 503);
         }

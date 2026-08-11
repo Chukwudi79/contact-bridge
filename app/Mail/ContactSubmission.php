@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\ContactSource;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -12,14 +13,17 @@ class ContactSubmission extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public readonly array $submission)
+    public function __construct(
+        public readonly array $submission,
+        public readonly ContactSource $source,
+    )
     {
     }
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'New contact form submission from '.$this->submission['website_origin'],
+            subject: $this->source->email_subject ?: 'New contact form submission from '.$this->submission['website_origin'],
         );
     }
 
@@ -27,7 +31,7 @@ class ContactSubmission extends Mailable
     {
         return new Content(
             view: 'emails.contact-submission',
-            with: ['submission' => $this->submission],
+            with: ['submission' => $this->submission, 'source' => $this->source],
         );
     }
 }

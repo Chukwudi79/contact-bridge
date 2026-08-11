@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminSubmissionController;
 use App\Http\Controllers\AdminSourceController;
 use App\Http\Middleware\EnsureAdmin;
@@ -19,9 +20,17 @@ Route::post('/admin/login', [AdminAuthController::class, 'store'])->middleware('
 Route::post('/admin/logout', [AdminAuthController::class, 'destroy'])->name('admin.logout');
 
 Route::middleware(EnsureAdmin::class)->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('/submissions', [AdminSubmissionController::class, 'index'])->name('submissions.index');
+    Route::get('/submissions/{submission}', [AdminSubmissionController::class, 'show'])->name('submissions.show');
     Route::patch('/submissions/{submission}', [AdminSubmissionController::class, 'update'])->name('submissions.update');
+    Route::post('/submissions/{submission}/resend', [AdminSubmissionController::class, 'resend'])->name('submissions.resend');
+    Route::post('/submissions/{submission}/reply', [AdminSubmissionController::class, 'reply'])->name('submissions.reply');
     Route::get('/sources', [AdminSourceController::class, 'index'])->name('sources.index');
     Route::post('/sources', [AdminSourceController::class, 'store'])->name('sources.store');
     Route::patch('/sources/{source}', [AdminSourceController::class, 'update'])->name('sources.update');
+    Route::get('/sources/{source}/template', [AdminSourceController::class, 'editTemplate'])->name('sources.template.edit');
+    Route::patch('/sources/{source}/template', [AdminSourceController::class, 'updateTemplate'])->name('sources.template.update');
+    Route::get('/sources/{source}/template/preview', [AdminSourceController::class, 'previewTemplate'])->name('sources.template.preview');
+    Route::get('/sources/{source}/template/preview/email', [AdminSourceController::class, 'previewEmail'])->name('sources.template.preview.email');
 });
